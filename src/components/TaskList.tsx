@@ -1,5 +1,5 @@
-import { useState } from 'react'
-
+import { FormEvent, useState } from 'react'
+import { v4 as uuidV4 } from "uuid";
 import '../styles/tasklist.scss'
 
 import { FiTrash, FiCheckSquare } from 'react-icons/fi'
@@ -14,8 +14,14 @@ export function TaskList() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [newTaskTitle, setNewTaskTitle] = useState('');
 
-  function handleCreateNewTask() {
+  function handleCreateNewTask(e: FormEvent) {
     // Crie uma nova task com um id random, não permita criar caso o título seja vazio.
+    e.preventDefault();
+    const title = newTaskTitle;
+    if (title === '') return;
+    setTasks(prevTasks => {
+      return [...prevTasks, {id: parseInt(uuidV4()), title: newTaskTitle, isComplete: false}]
+    })
   }
 
   function handleToggleTaskCompletion(id: number) {
@@ -24,7 +30,9 @@ export function TaskList() {
 
   function handleRemoveTask(id: number) {
     // Remova uma task da listagem pelo ID
-  }
+    const newTasks = tasks.filter(task => !task.id);
+    setTasks(newTasks);
+  } 
 
   return (
     <section className="task-list container">
