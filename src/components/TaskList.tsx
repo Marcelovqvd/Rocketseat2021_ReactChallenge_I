@@ -1,5 +1,5 @@
-import { FormEvent, useState } from 'react'
-import { v4 as uuidV4 } from "uuid";
+import { useState } from 'react'
+
 import '../styles/tasklist.scss'
 
 import { FiTrash, FiCheckSquare } from 'react-icons/fi'
@@ -19,13 +19,12 @@ export function TaskList() {
     if (!newTaskTitle) return;
 
     const newTask = {
-      id: parseInt(uuidV4()), 
-      title: newTaskTitle, 
+      id: Math.random(),
+      title: newTaskTitle,
       isComplete: false
     }
 
-    setTasks(prevState => [...prevState, newTask]);
-
+    setTasks(oldState => [...oldState, newTask]);
     setNewTaskTitle('');
   }
 
@@ -34,8 +33,7 @@ export function TaskList() {
     const newTasks = tasks.map(task => task.id === id ? {
       ...task,
       isComplete: !task.isComplete
-    } :
-    task);
+    } : task);
 
     setTasks(newTasks)
   }
@@ -43,8 +41,10 @@ export function TaskList() {
   function handleRemoveTask(id: number) {
     // Remova uma task da listagem pelo ID
     const filteredTasks = tasks.filter(task => task.id !== id);
-    setTasks(filteredTasks );
-  } 
+
+    setTasks(filteredTasks)
+
+  }
 
   return (
     <section className="task-list container">
